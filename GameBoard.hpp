@@ -38,4 +38,6 @@ private:
     int HEIGHT;
     int WIDTH;
 
+    int newRow;
+    int newCol;
 };

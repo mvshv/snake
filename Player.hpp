@@ -1,29 +1,28 @@
-// int GameBoard::doMove(Direction direction) {
+#include <iostream>
+#include <vector>
 
-//   switch(direction) {
-//     case Direction::LEFT:
-      
-//      break;
-//       case Direction::UP:
+enum class Direction : int {
+    LEFT = 0,
+    UP = 1,
+    RIGHT = 2,
+    DOWN = 3
+};
 
-//      break;
-//      case Direction::RIGHT:
+struct DirectionOffset {
+    int heightOffset;
+    int widthOffset;
+};
 
-//      break;
-//      case Direction::DOWN:
+class Player {
+    public:
+        Player(std::string name = "XYZ");
+        ~Player();
 
-//      break;
+        DirectionOffset doMove(Direction direction);
+        int updatePoints(int points);
+        
+    private:
+    std::string name;
+    int points;
 
-//      default:
-//       std::cout << "wrong move\n";
-//       break;
-//   }
-//   return 0;
-// }
-
-// enum class Direction : int {
-//     LEFT = 0,
-//     UP = 1,
-//     RIGHT = 2,
-//     DOWN = 3
-// };
+};

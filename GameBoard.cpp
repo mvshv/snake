@@ -1,4 +1,5 @@
 #include "GameBoard.hpp"
+#include <ncurses.h>
 
 GameBoard::GameBoard(int height, int width) :
   HEIGHT(height),
@@ -14,31 +15,41 @@ GameBoard::GameBoard(int height, int width) :
       }
     }
     board[height / 2][width / 2] = static_cast<int>(Objects::SNAKE_HEAD);
+
+    newRow = height / 2;
+    newCol = width / 2;
   } 
 
 void GameBoard::displayBoard() const {
   for(int i = 0; i < HEIGHT; ++i) {
     for(int j = 0; j < WIDTH; ++j) {
-      std::cout << board[i][j] << " ";
+      mvprintw(i, j*2, "%d ", board[i][j]);
+    //  std::cout << board[i][j] << " ";
     }
       std::cout << "\n";
   }
 }
 
 int GameBoard::doMove(int heightOffset, int widthOffset) {
+    HeadLocation headLocation = findLocationOfHead();
   
-  HeadLocation headLocation = findLocationOfHead();
+    newCol = headLocation.COL + heightOffset;
+    newRow = headLocation.ROW + widthOffset;
+  
+    board[headLocation.ROW][headLocation.COL] = static_cast<int>(Objects::EMPTY);
+  
+    if (board[newRow][newCol] == static_cast<int>(Objects::FOOD)) {
+        printw("ate the food\n");
+    } else if (board[newRow][newCol] == static_cast<int>(Objects::SNAKE_BODY)) {
+        printw("hit the body\n");
+        return checkCollision();
+    } else if (board[newRow][newCol] == static_cast<int>(Objects::WALL)) {
+        printw("hit the wall\n");
+        return checkCollision();
+    }
+    board[newRow][newCol] = static_cast<int>(Objects::SNAKE_HEAD);
 
-  int newCol = headLocation.COL + heightOffset;
-  int newRow = headLocation.ROW + widthOffset;
-
-  board[headLocation.ROW][headLocation.COL] = static_cast<int>(Objects::EMPTY);
-
-  board[newRow][newCol] = static_cast<int>(Objects::SNAKE_HEAD);
-  if(board[newRow][newCol] == static_cast<int>(Objects::FOOD)) {
-    std::cout << "ate the food \n";
-  }
-  return checkCollision();
+    return checkCollision();
 }
 
 HeadLocation GameBoard::findLocationOfHead() {
@@ -56,15 +67,24 @@ HeadLocation GameBoard::findLocationOfHead() {
   return headLocation;
 }
 
+
+
 bool GameBoard::checkCollision() {
-  HeadLocation headLocation = findLocationOfHead();
 
-  if(board[headLocation.ROW][headLocation.COL] == static_cast<int>(Objects::WALL)) {
-    std::cout << "hit the wall\n";
-    return true;
-  }
+    if (board[newRow][newCol] == static_cast<int>(Objects::WALL)) {
+        printw("hit the wall\n");
+        return true;
+    }
 
-  // TODO: Check for collision with snake's body
+    if (newRow < 0 || newRow >= HEIGHT || newCol < 0 || newCol >= WIDTH) {
+        printw("out of bounds\n");
+        return true;
+    }
 
-  return false;
+    if (board[newRow][newCol] == static_cast<int>(Objects::SNAKE_BODY)) {
+        printw("hit the body\n");
+        return true;
+    }
+
+    return false;
 }
