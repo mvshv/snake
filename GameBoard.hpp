@@ -1,8 +1,14 @@
+#ifndef GAMEBOARD_HPP
+#define GAMEBOARD_HPP
+
 #include <iostream>
 #include <string>
 #include <vector>
 
-enum class Objects : int {
+// Forward declaration of SpecialEvents class
+class SpecialEvents;
+
+enum class Objects {
     EMPTY = 0,
     SNAKE_HEAD = 1,
     SNAKE_BODY = 2,
@@ -15,6 +21,11 @@ struct HeadLocation {
     int COL;
 };
 
+struct FoodLocation {
+    int ROW;
+    int COL;
+};
+
 class GameBoard {
 
 public:
@@ -22,7 +33,7 @@ public:
     void displayBoard() const;
     int doMove(int heightOffset, int widthOffset);
     bool checkCollision();
-
+    void setSpecialObjectAt(int height, int width, Objects);
     HeadLocation findLocationOfHead();
 
     int getHeight() const {
@@ -32,12 +43,15 @@ public:
         return WIDTH;
     }
 
-    std::vector<std::vector<int>> board;
+    std::vector<std::vector<int> > board;
         
 private:
+    SpecialEvents *specialEvents;
     int HEIGHT;
     int WIDTH;
 
     int newRow;
     int newCol;
+
 };
+#endif // GAMEBOARD_HPP

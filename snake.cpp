@@ -9,12 +9,13 @@ int main() {
     GameBoard gameBoard(15, 15);
     Player player;
     Direction direction = Direction::LEFT;
-
+    SpecialEvents event;
     initscr();
     keypad(stdscr, TRUE);
     noecho();
     nodelay(stdscr, TRUE);
 
+    event.addFood(gameBoard);
     while(!gameBoard.checkCollision()) {
         gameBoard.displayBoard();
 
@@ -33,7 +34,7 @@ int main() {
         DirectionOffset offset = player.doMove(direction);
         gameBoard.doMove(offset.widthOffset, offset.heightOffset);
 
-        usleep(300000);
+        usleep(250000);
     }
 
     printw("works well\n");

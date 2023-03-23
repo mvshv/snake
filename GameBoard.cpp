@@ -1,4 +1,5 @@
 #include "GameBoard.hpp"
+#include "SpecialEvents.hpp"
 #include <ncurses.h>
 
 GameBoard::GameBoard(int height, int width) :
@@ -24,7 +25,6 @@ void GameBoard::displayBoard() const {
   for(int i = 0; i < HEIGHT; ++i) {
     for(int j = 0; j < WIDTH; ++j) {
       mvprintw(i, j*2, "%d ", board[i][j]);
-    //  std::cout << board[i][j] << " ";
     }
       std::cout << "\n";
   }
@@ -40,6 +40,7 @@ int GameBoard::doMove(int heightOffset, int widthOffset) {
   
     if (board[newRow][newCol] == static_cast<int>(Objects::FOOD)) {
         printw("ate the food\n");
+        specialEvents->addFood(*this);
     } else if (board[newRow][newCol] == static_cast<int>(Objects::SNAKE_BODY)) {
         printw("hit the body\n");
         return checkCollision();
@@ -87,4 +88,11 @@ bool GameBoard::checkCollision() {
     }
 
     return false;
+}
+
+void GameBoard::setSpecialObjectAt(int height, int width, Objects) {
+  board[height][width] = static_cast<int>(Objects::FOOD);
+  FoodLocation foodLocation;
+  foodLocation.ROW = height;
+  foodLocation.COL = width;
 }
