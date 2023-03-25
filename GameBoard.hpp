@@ -1,6 +1,7 @@
 #ifndef GAMEBOARD_HPP
 #define GAMEBOARD_HPP
 
+#include "Player.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -16,10 +17,21 @@ enum class Objects {
     WALL = 4
 };
 
-struct HeadLocation {
+struct HeadLocation{
     int ROW;
     int COL;
 };
+
+class BodyLocation {
+public:
+    BodyLocation(HeadLocation& location) {
+        this->ROW = location.ROW;
+        this->COL = location.COL;
+    }
+    int ROW;
+    int COL;
+};
+
 
 struct FoodLocation {
     int ROW;
@@ -29,7 +41,7 @@ struct FoodLocation {
 class GameBoard {
 
 public:
-    GameBoard(int HEIGHT, int WIDTH);
+    GameBoard(int HEIGHT, int WIDTH, Player& player);
     void displayBoard() const;
     int doMove(int heightOffset, int widthOffset);
     bool checkCollision();
@@ -47,11 +59,14 @@ public:
         
 private:
     SpecialEvents *specialEvents;
+    Player &player;
+    std::vector<BodyLocation> bodyLocations;
     int HEIGHT;
     int WIDTH;
 
     int newRow;
     int newCol;
 
+    int snakeLength;
 };
 #endif // GAMEBOARD_HPP

@@ -1,3 +1,6 @@
+#ifndef PLAYER_HPP
+#define PLAYER_HPP
+
 #include <iostream>
 #include <vector>
 
@@ -19,10 +22,15 @@ class Player {
         ~Player();
 
         DirectionOffset doMove(Direction direction);
-        int updatePoints(int points);
+        void updatePoints(int points);
+        int getPoints() const;
+        int getNumberOfBodyParts() const;
         
     private:
     std::string name;
     int points;
+    int numberOfBodyParts;
 
 };
+
+#endif //PLAYER_HPP

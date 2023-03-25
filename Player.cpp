@@ -1,6 +1,9 @@
 #include "Player.hpp"
 
-Player::Player(std::string name) : name(name) {}
+Player::Player(std::string name) : 
+    name(name),
+    points(0),
+    numberOfBodyParts(0) {}
 
 Player::~Player(){}
 
@@ -36,8 +39,15 @@ DirectionOffset Player::doMove(Direction direction) {
   return directionOffset;
 }
 
-int Player::updatePoints(int points) {
+void Player::updatePoints(int points) {
     this->points += points;
+    numberOfBodyParts++;
+}
 
-    return this->points;
+int Player::getPoints() const {
+    return points;   
+}
+
+int Player::getNumberOfBodyParts() const {
+    return numberOfBodyParts;
 }
