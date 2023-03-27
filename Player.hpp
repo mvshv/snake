@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <vector>
+#include <chrono>
+#include <random>
 
 enum class Direction : int {
     LEFT = 0,
@@ -22,7 +24,8 @@ class Player {
         ~Player();
 
         DirectionOffset doMove(Direction direction);
-        void updatePoints(int points);
+        void eatedRegularFood(int points);
+        void eatedExtraFood(int points);
         int getPoints() const;
         int getNumberOfBodyParts() const;
         

@@ -13,8 +13,7 @@ class SpecialEvents {
     SpecialEvents();
     ~SpecialEvents();
     void addFood(GameBoard& gameBoard);
-
-    private:
+    void addExtaFood(GameBoard& gameBoard);
 
 };
 #endif //SPECIALEVENTS_HPP

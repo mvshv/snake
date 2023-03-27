@@ -7,7 +7,7 @@
 
 int main() {
     Player player("XYZ");
-    GameBoard gameBoard(15, 15, player);
+    GameBoard gameBoard(20, 20, player);
     Direction direction = Direction::LEFT;
     SpecialEvents event;
     initscr();
@@ -16,10 +16,9 @@ int main() {
     nodelay(stdscr, TRUE);
 
     event.addFood(gameBoard);
+
     while(!gameBoard.checkCollision()) {
         gameBoard.displayBoard();
-        printw("\nPOINTS: %d\n", player.getPoints());
-        printw("BODY PARTS: %d\n", player.getNumberOfBodyParts());
         int key = getch();
 
         if(key == KEY_LEFT) {
@@ -34,10 +33,9 @@ int main() {
 
         DirectionOffset offset = player.doMove(direction);
         gameBoard.doMove(offset.widthOffset, offset.heightOffset);
-        usleep(200000);
+        usleep(100000);
     }
-
-   endwin();
+    endwin();
 
     return 0;
 }

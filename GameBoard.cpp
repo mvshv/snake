@@ -20,12 +20,10 @@ GameBoard::GameBoard(int height, int width, Player& player) :
 
     newRow = height / 2;
     newCol = width / 2;
-    snakeLength = 0;
   }
 
-#include <ncurses.h>
-
 void GameBoard::displayBoard() const {
+  printw("\nPOINTS: %d\n", player.getPoints());
 
   for (int i = 0; i < HEIGHT; ++i) {
     for (int j = 0; j < WIDTH; ++j) {
@@ -37,7 +35,10 @@ void GameBoard::displayBoard() const {
           mvprintw(i, j * 2, "##");
           break;
         case static_cast<int>(Objects::FOOD):
-          mvprintw(i, j * 2, "%%");
+          mvprintw(i, j * 2, "^^");
+          break;
+        case static_cast<int>(Objects::EXTRA_FOOD):
+          mvprintw(i, j * 2, "!!");
           break;
         case static_cast<int>(Objects::SNAKE_HEAD):
           mvprintw(i, j * 2, "[]");
@@ -48,10 +49,8 @@ void GameBoard::displayBoard() const {
       }
     }
   }
-
   refresh();
 }
-
 
 int GameBoard::doMove(int heightOffset, int widthOffset) {
     HeadLocation headLocation = findLocationOfHead();
@@ -72,16 +71,20 @@ int GameBoard::doMove(int heightOffset, int widthOffset) {
     }
 
     if (board[newRow][newCol] == static_cast<int>(Objects::FOOD)) {
-        printw("ate the food\n");
-        player.updatePoints(5);
+        player.eatedRegularFood(5);
         specialEvents->addFood(*this);
-    } else if (board[newRow][newCol] == static_cast<int>(Objects::SNAKE_BODY)) {
-        printw("hit the body\n");
-        return checkCollision();
-    } else if (board[newRow][newCol] == static_cast<int>(Objects::WALL)) {
-        printw("hit the wall\n");
-        return checkCollision();
+        if(player.getPoints() % 15 == 0) {
+            specialEvents->addExtaFood(*this);
+        }
     }
+     if (board[newRow][newCol] == static_cast<int>(Objects::EXTRA_FOOD)) {
+        player.eatedExtraFood(20);
+    } 
+    else if (board[newRow][newCol] == static_cast<int>(Objects::SNAKE_BODY))
+        return checkCollision();
+      else if (board[newRow][newCol] == static_cast<int>(Objects::WALL))
+        return checkCollision();
+    
     board[newRow][newCol] = static_cast<int>(Objects::SNAKE_HEAD);
 
     return checkCollision();
@@ -101,8 +104,6 @@ HeadLocation GameBoard::findLocationOfHead() {
   }
   return headLocation;
 }
-
-
 
 bool GameBoard::checkCollision() {
 
@@ -126,7 +127,13 @@ bool GameBoard::checkCollision() {
 
 void GameBoard::setSpecialObjectAt(int height, int width, Objects) {
   board[height][width] = static_cast<int>(Objects::FOOD);
-  FoodLocation foodLocation;
-  foodLocation.ROW = height;
-  foodLocation.COL = width;
+}
+
+void GameBoard::setExtraObjectAt(int height, int width, Objects) {
+  board[height][width] = static_cast<int>(Objects::EXTRA_FOOD);
+
+}
+
+void GameBoard::getObjectAt(int height, int width) {
+  std::cout << board[height][width];
 }

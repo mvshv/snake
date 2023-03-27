@@ -39,9 +39,12 @@ DirectionOffset Player::doMove(Direction direction) {
   return directionOffset;
 }
 
-void Player::updatePoints(int points) {
+void Player::eatedRegularFood(int points) {
     this->points += points;
     numberOfBodyParts++;
+}
+void Player::eatedExtraFood(int points) {
+    this->points += points;
 }
 
 int Player::getPoints() const {

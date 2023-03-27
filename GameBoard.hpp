@@ -14,7 +14,8 @@ enum class Objects {
     SNAKE_HEAD = 1,
     SNAKE_BODY = 2,
     FOOD = 3,
-    WALL = 4
+    EXTRA_FOOD = 4,
+    WALL = 5
 };
 
 struct HeadLocation{
@@ -28,15 +29,11 @@ public:
         this->ROW = location.ROW;
         this->COL = location.COL;
     }
+    
     int ROW;
     int COL;
 };
 
-
-struct FoodLocation {
-    int ROW;
-    int COL;
-};
 
 class GameBoard {
 
@@ -46,6 +43,8 @@ public:
     int doMove(int heightOffset, int widthOffset);
     bool checkCollision();
     void setSpecialObjectAt(int height, int width, Objects);
+    void setExtraObjectAt(int height, int width, Objects );
+    void getObjectAt(int height, int width);
     HeadLocation findLocationOfHead();
 
     int getHeight() const {
@@ -66,7 +65,6 @@ private:
 
     int newRow;
     int newCol;
-
-    int snakeLength;
 };
+
 #endif // GAMEBOARD_HPP
